@@ -100,7 +100,13 @@ mv trout* ../index
 - Move into the folder which contains the fastq sequence data using _cd_ command
 - Run the following command (if you have a multi-core system you can add –t 4)
 ```
-fastqc *fastqc.gz
+fastqc *fastqc
+```
+or for multi-core system
+
+```
+fastqc -t 5 *fastqc
+
 ```
 - Several new html files will be generated. You can open these files using the following command
 ```
@@ -119,7 +125,7 @@ firefox *html &
 mulitqc .
 ```
 
-1. **Mapping/Filtering** (30-40 minutes)
+2. **Mapping/Filtering** (30-40 minutes)
   - **Create a reference index using bowtie2-build**
 
 First, we need to create an index based on our genome reference (bowtie has a pre-built index for common species and available to download from bowtie&#39;s website.)
@@ -223,7 +229,7 @@ java -jar path/to/picard.jar MarkDuplicates INPUT=filtered_Sorted.bam OUTPUT=fil
 
 **Now we are ready to perform peak calling.** (10 minutes)
 
-1. **ChIP-seq peak calling.**
+3. **ChIP-seq peak calling.**
 
 First, create a directory for the output generated from MACS2 and let&#39;s call it peak:
 
@@ -239,7 +245,7 @@ This will generate some .xls and .bed files. .bed are peak lists in bed format.
 
 
 
-1. **Peaks quality assessment using ChIPQC** (20 minutes)
+4. **Peaks quality assessment using ChIPQC** (20 minutes)
 
 **Using Rstudio, we will check the quality of the peaks.**
 
@@ -295,7 +301,7 @@ bedtools intersect  -a ../peak/replicate1 –b ../peak/replicate2 –wo > combin_rep
 
 ```
 
-1. **Annotation** (10 minutes)
+5. **Annotation** (10 minutes)
 
 After we have identified enriched regions, it\'s essential to find the function of these regions and the genes that are associated with the genome.
 
@@ -397,7 +403,7 @@ GRanges object with 5 ranges and 16 metadata columns:
 
   ```
 
-1. **Visualize the data using IGV.** (If time permitted)
+6. **Visualize the data using IGV.** (If time permitted)
 
 Start igv tool
 
@@ -415,3 +421,54 @@ Now click File \-\> Load from File and select the tdf files,
 The coverage will be shown as bar plots. Try zooming and moving the viewer window to see some peaks. The genomic region can be input to the text box at the top.
 
 ![IGV figure 1](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/igv_fig1.png)
+![IGV figure 1](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/igv_figK4.png)
+
+7.	**Evaluating Differential Enrichment**
+The main goal of differential binding analysis is to find changes in protein-DNA interactions measured. We will look at the differential enrichment between histone K4 and histone K27. For this part we will use diffBind R Bioconductor package.
+In Rstudio open new R script file and write the following code. 
+
+```{r}
+library(DiffBind)
+library(tidyverse)
+library(dplyr)
+
+samples <- read.csv('sample.csv')
+dbObj <- dba(sampleSheet=samples)
+# calculate a binding matrix based on the read counts for every sample 
+dbObj <- dba.count(dbObj, bUseSummarizeOverlaps=TRUE)
+# plot correlation between replicates
+plot(dbObj)
+
+# group sample based on factor. Set the minMembers parameter to 2 (default is 3).
+dbObj <- dba.contrast(dbObj, categories=DBA_FACTOR, minMembers = 2)
+
+# using DESseq an edger methods to performs differential binding analysis  
+dbObj <- dba.analyze(dbObj, method=DBA_ALL_METHODS)
+dba.plotHeatmap(dbObj, contrast=1, correlations=FALSE)
+dba.show(dbObj, bContrasts=T)	
+
+#Visualizing the results
+dba.plotVenn(dbObj,contrast=1,method=DBA_ALL_METHODS)
+
+# rreport the differentially bound peak regions, identified by either method (DESeq2/edgeR).
+res_deseq <- dba.report(dbObj, method=DBA_DESEQ2)
+res_edger <- dba.report(dbObj, method=DBA_EDGER)
+res_deseq
+res_edger
+# Write to file
+out <- as.data.frame(res_deseq)
+write.table(out, file="results/D8_K4_vs_D8_K27_diffbind.txt", sep="\t", quote=F, row.names=F)
+
+# create bed files for each keeping only significant peaks(p < 0.05)
+K4_enrich <- dplyr::filter( out, FDR < 0.05 & Fold > 0) 
+
+# Write to file
+write.table(K4_enrich, file="results/K4_enriched.bed", sep="\t", quote=F, row.names=F, col.names=F)
+
+K27_enrich = dplyr::filter(out, FDR < 0.05 & Fold < 0 )
+
+# Write to file
+write.table(K27_enrich, file="results/K27_enriched.bed", sep="\t", quote=F, row.names=F, col.names=F)
+```
+
+![diffBind](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/diffBind_overlap.png)
