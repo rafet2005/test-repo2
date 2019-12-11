@@ -145,7 +145,7 @@ Execute the following command (10 minutes)
 
 
 ```
-bowtie2 -p 4 -q --local -x reference\_data.fa -U input.fastq -S /results/bowtie2/output.sam
+bowtie2 -p 4 -q --local -x reference_data.fa -U input.fastq -S /results/bowtie2/output.sam
 ```
 
 
@@ -270,7 +270,7 @@ chipObj <- ChIPQC(samples)
 ChIPQCreport(chipObj, reportName="ChIP QC report: K4 and K27", reportFolder="ChIPQCreport")
 ```
 
- ![](img src="https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chiqc_tabl1.png")
+ [img src="https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chiqc_tabl1.png"
 
 1. **Handling Replicate in Chip-seq using IDR** (5 minutes)
 
