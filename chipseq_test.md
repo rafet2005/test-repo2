@@ -270,7 +270,7 @@ chipObj <- ChIPQC(samples)
 ChIPQCreport(chipObj, reportName="ChIP QC report: K4 and K27", reportFolder="ChIPQCreport")
 ```
 
- [img src="https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chiqc_tabl1.png"]
+ [<img src="https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chiqc_tabl1.png">]
 
 1. **Handling Replicate in Chip-seq using IDR** (5 minutes)
 
