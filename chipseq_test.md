@@ -25,20 +25,23 @@ Participants should pre-install the following software before they come to the w
 - Integrated genome viewer ([http://www.broadinstitute.org/igv/home](http://www.broadinstitute.org/igv/home)).
 - R/Bioconductor package diffbind, ChipQC,  ChIPseeker, and GenomicFeatures  to install.
 
+```{r}
 if (!requireNamespace("BiocManager", quietly = TRUE))
 
     install.packages("BiocManager")
-    BiocManager::install(&#39;shengqh/ChIPQC&#39;)
 
-    BiocManager::install(&quot;DiffBind&quot;)
+    BiocManager::install("shengqh/ChIPQC")
 
-    BiocManager::install(&quot;ChIPseeker&quot;)
+    BiocManager::install("DiffBind")
 
-    BiocManager::install(&quot;GenomicFeatures&quot;)
+    BiocManager::install("ChIPseeker")
 
-    install.packages(&quot;devtools&quot;)
+    BiocManager::install("GenomicFeatures")
 
-    devtools::install\_github(&quot;hadley/tidyverse&quot;)
+    install.packages("devtools")
+
+    devtools::install\_github("hadley/tidyverse")
+```
 
 **Data** :
 
@@ -62,9 +65,9 @@ Create directory chipseq\_project in your home directory
 
 
 ```
-mkdir chipseq\_project
+mkdir chipseq_project
 
-cd chipseq\_project
+cd chipseq_project
 ```
 
  Create the following directories structure for your analyses.
@@ -81,11 +84,11 @@ mkdir genome
 
 mkdir results
 
-cd data\_fastq\_file
+cd data_fastq_file
 
 mv fastq ../fastq/
 
-mv trout\* ../index
+mv trout* ../index
 
 ```
 
@@ -97,11 +100,11 @@ mv trout\* ../index
 - Move into the folder which contains the fastq sequence data using _cd_ command
 - Run the following command (if you have a multi-core system you can add –t 4)
 ```
-fastqc \*fastqc.gz
+fastqc *fastqc.gz
 ```
 - Several new html files will be generated. You can open these files using the following command
 ```
-firefox \*html &amp;
+firefox *html &amp;
 ```
  ![](data:image/*;)
 
@@ -121,13 +124,13 @@ mulitqc .
 
 First, we need to create an index based on our genome reference (bowtie has a pre-built index for common species and available to download from bowtie&#39;s website.)
 
-1.
+
   - This step is slow, so that we will use a pre-built index. (whenever you run this step it will generate six .ebwt files, which represent the index files for the reference genome)
 
 (Do not run)To build an index use the following command (5 minutes)
 
 ```
-bowtie2-build path\_to\_reference\_genoem.fa prefix\_to\_index\_name
+bowtie2-build path_to_reference_genoem.fa prefix_to_index_name
 ```
 
 
@@ -168,13 +171,13 @@ head    output.sam
 
 **Convert the alignment to BAM format, then create an index, and sort the BAM file.** (20 minutes)
 
-** ** A bam (smaller and faster to process) file format is needed for the next analysis, so we need to convert the sam file to bam file using samtools.
+A bam (smaller and faster to process) file format is needed for the next analysis, so we need to convert the sam file to bam file using samtools.
 
 Run the following command:
 
 
 ```
-samtools view –h -bS -o output\_unsorted.bam input.sam
+samtools view –h -bS -o output_unsorted.bam input.sam
 ```
 
 
@@ -196,7 +199,7 @@ Run the following command:
 
 
 ```
-samtools view -q 20 -b -o filtered\_sorted.bam read\_sorted.bam
+samtools view -q 20 -b -o filtered_sorted.bam read_sorted.bam
 ```
 
 
@@ -214,7 +217,7 @@ samtools index reads.sorted.bam
 
 
 ```
-java -jar path/to/picard.jar MarkDuplicates INPUT=filtered\_Sorted.bam OUTPUT=filterd\_sorted\_mDup.bam ASSUME\_SORTED=true METRICS\_FILE=metrics.txt VALIDATION\_STRINGENCY=SILENT
+java -jar path/to/picard.jar MarkDuplicates INPUT=filtered_Sorted.bam OUTPUT=filterd_sorted_mDup.bam ASSUME_SORTED=true METRICS_FILE=metrics.txt VALIDATION_STRINGENCY=SILENT
 ```
 
 
@@ -228,7 +231,7 @@ Go to the peak directory, and run following in command window for our four bam f
 
 
 ```
-macs2 callpeak -t filtered\_sorted\_mDup.bam -c Input\_control.bam –-n output\_prefix 2\&gt; output.log
+macs2 callpeak -t filtered_sorted_mDup.bam -c Input_control.bam –-n output_prefix 2> output.log
 ```
 
 
@@ -246,7 +249,7 @@ This will generate some .xls and .bed files. .bed are peak lists in bed format.
 
 SampleID,Factor,Replicate,bamReads,ControlID,bamControl,Peaks,PeakCaller,Tissue,Condition
 
-Open up a new R script (&#39;File&#39; -\&gt; &#39;New File&#39; -\&gt; &#39;Rscript&#39;), and save it as chipQC.R
+Open up a new R script (File\-> New File \-> Rscript), and save it as chipQC.R
 
 Run the following script in Rstudio
 
@@ -256,15 +259,15 @@ library(ChIPQC)
 
 ## Load sample data
 
-samples \&lt;- read.csv(&#39;sample.csv&#39;)
+samples <- read.csv("sample.csv")
 
 View(samples)
 
 ## Create ChIPQC object
 
-chipObj \&lt;- ChIPQC(samples)
+chipObj <- ChIPQC(samples)
 
-ChIPQCreport(chipObj, reportName=&quot;ChIP QC report: K4 and K27&quot;, reportFolder=&quot;ChIPQCreport&quot;)
+ChIPQCreport(chipObj, reportName="ChIP QC report: K4 and K27", reportFolder="ChIPQCreport")
 ```
 
  ![](data:image/*;==)
@@ -279,22 +282,22 @@ In the chipseq\_poroject directory create a new directory  and name it combin\_r
 
 
 ```
-mkdir  combin\_replicate
+mkdir  combin_replicate
 
-cd combin\_replicate
+cd combin_replicate
 ```
 
 Run the following command (change the name of replicate to the correct names):
 
 ```
 
-bedtools intersect  -a ../peak/replicate1 –b ../peak/replicate2 –wo \&gt; combin\_replicate1\_and\_2
+bedtools intersect  -a ../peak/replicate1 –b ../peak/replicate2 –wo > combin_replicate1_and_2
 
 ```
 
 1. **Annotation** (10 minutes)
 
-After we have identified enriched regions, it&#39;s essential to find the function of these regions and the genes that are associated with the genome.
+After we have identified enriched regions, it\'s essential to find the function of these regions and the genes that are associated with the genome.
 
 For peak annotation, we will use R package _chIPsseker_ to identify genes that close to the peaks.
 
@@ -308,23 +311,23 @@ library(ChIPseeker)
 
 # create database object using rainbow trout gff file
 
-trout\_txdb \&lt;-makeTxDbFromGFF(&quot;genome/GCF\_002163495.1\_Omyk\_1.0\_genomic.gff&quot;)
+trout_txdb <-makeTxDbFromGFF("genome/GCF_002163495.1_Omyk_1.0_genomic.gff")
 
-saveDb(trout\_txdb, file=&quot;Trout.sqlite&quot;)
+saveDb(trout_txdb, file="Trout.sqlite")
 
-trout\_txdb \&lt;- loadDb(&quot;Trout.sqlite&quot;)
+trout_txdb <- loadDb("Trout.sqlite")
 
-txdb \&lt;- trout\_txdb
+txdb <- trout_txdb
 
 # Load data
 
-samplefiles \&lt;- list.files(&quot;peak&quot;, pattern= &quot;.narrowPeak&quot;, full.names=T)
+samplefiles <- list.files("peak", pattern= ".narrowPeak", full.names=T)
 
-samplefiles \&lt;- as.list(samplefiles)
+samplefiles <- as.list(samplefiles)
 
-names(samplefiles) \&lt;- c(&quot;2D8-\_K27&quot;, &quot;2D8-\_K4&quot;,&quot;1D8-\_K27&quot;, &quot;1D8-\_K4&quot;)
+names(samplefiles) <- c("2D8-_K27", "2D8-_K4","1D8-_K27", "1D8-_K4")
 
-peakAnnoList \&lt;- lapply(samplefiles, annotatePeak, TxDb=txdb,
+peakAnnoList <- lapply(samplefiles, annotatePeak, TxDb=txdb,
 
                      tssRegion=c(-3000, 3000), verbose=FALSE)
 
@@ -332,7 +335,7 @@ peakAnnoList
 
 plotAnnoBar(peakAnnoList)
 
-plotDistToTSS(peakAnnoList, title=&quot;Distribution of peak relative to TSS&quot;)
+plotDistToTSS(peakAnnoList, title="Distribution of peak relative to TSS")
 
 ```
 
@@ -342,43 +345,43 @@ plotDistToTSS(peakAnnoList, title=&quot;Distribution of peak relative to TSS&quo
 
 # Write to file
 
-write.table(peakAnnoList[[&quot;1D8-\_K27&quot;]]@anno, file=&quot;results/chipseqAnn.txt&quot;, sep=&quot;\t&quot;, quote=F, row.names=F)
+write.table(peakAnnoList[["1D8-_K27"]]@anno, file="results/chipseqAnn.txt", sep="\t", quote=F, row.names=F)
 
-\&gt; peakAnnoList[[&quot;1D8-\_K27&quot;]]@anno
+peakAnnoList[["1D8-_K27"]]@anno
 
 GRanges object with 5 ranges and 16 metadata columns:
 
-         seqnames            ranges strand | ID8.K27\_S10Ch1\_peak\_1       X95        .  X5.80207 X14.76815  X9.50397      X273
+         seqnames            ranges strand | ID8.K27_S10Ch1_peak_1       X95        .  X5.80207 X14.76815  X9.50397      X273
 
-            \&lt;Rle\&gt;         \&lt;IRanges\&gt;  \&lt;Rle\&gt; |              \&lt;factor\&gt; \&lt;integer\&gt; \&lt;factor\&gt; \&lt;numeric\&gt; \&lt;numeric\&gt; \&lt;numeric\&gt; \&lt;integer\&gt;
+            <Rle>         <IRanges>  <Rle> |              <factor> <integer> <factor> <numeric> <numeric> <numeric> <integer>
 
-  [1] NC\_035077.1   6462386-6462787      \* | ID8-K27\_S10Ch1\_peak\_2        28        .   1.59412   7.43889   2.83001       109
+  [1] NC_035077.1   6462386-6462787      * | ID8-K27_S10Ch1_peak_2        28        .   1.59412   7.43889   2.83001       109
 
-  [2] NC\_035077.1 18511982-18512286      \* | ID8-K27\_S10Ch1\_peak\_3        19        .   3.29459   5.93627   1.94471       211
+  [2] NC_035077.1 18511982-18512286      * | ID8-K27_S10Ch1_peak_3        19        .   3.29459   5.93627   1.94471       211
 
-  [3] NC\_035077.1 71520644-71520967      \* | ID8-K27\_S10Ch1\_peak\_4        24        .   4.46286   6.89985   2.47762       226
+  [3] NC_035077.1 71520644-71520967      * | ID8-K27_S10Ch1_peak_4        24        .   4.46286   6.89985   2.47762       226
 
-  [4] NC\_035077.1 78606476-78606775      \* | ID8-K27\_S10Ch1\_peak\_5        31        .   5.21212   7.82383   3.11772       155
+  [4] NC_035077.1 78606476-78606775      * | ID8-K27_S10Ch1_peak_5        31        .   5.21212   7.82383   3.11772       155
 
-  [5] NC\_035077.1 84165948-84166506      \* | ID8-K27\_S10Ch1\_peak\_6       218        .    8.4195   29.7507  21.82188       265
+  [5] NC_035077.1 84165948-84166506      * | ID8-K27_S10Ch1_peak_6       218        .    8.4195   29.7507  21.82188       265
 
                                                annotation   geneChr geneStart   geneEnd geneLength geneStrand       geneId   transcriptId
 
-                                              \&lt;character\&gt; \&lt;integer\&gt; \&lt;integer\&gt; \&lt;integer\&gt;  \&lt;integer\&gt;  \&lt;integer\&gt;  \&lt;character\&gt;    \&lt;character\&gt;
+                                              <character> <integer> <integer> <integer>  <integer>  <integer>  <character>    <character>
 
-  [1] Intron (XM\_021616938.1/LOC110532765, intron 1 of 2)         2   6465836   6490638      24803          2 LOC110532690 XM\_021616819.1
+  [1] Intron (XM_021616938.1/LOC110532765, intron 1 of 2)         2   6465836   6490638      24803          2 LOC110532690 XM_021616819.1
 
-  [2]                                    Promoter (\&lt;=1kb)         2  18512632  18621908     109277          1 LOC110508592 XM\_021589263.1
+  [2]                                    Promoter (<=1kb)         2  18512632  18621908     109277          1 LOC110508592 XM_021589263.1
 
-  [3]                                   Distal Intergenic         2  71507413  71511751       4339          1 LOC110529485 XM\_021611701.1
+  [3]                                   Distal Intergenic         2  71507413  71511751       4339          1 LOC110529485 XM_021611701.1
 
-  [4]                                   Distal Intergenic         2  78354929  78360796       5868          2 LOC110530634 XR\_002474563.1
+  [4]                                   Distal Intergenic         2  78354929  78360796       5868          2 LOC110530634 XR_002474563.1
 
-  [5]                                    Promoter (\&lt;=1kb)         2  84164660  84165260        601          2 LOC110531895 XR\_002474772.1
+  [5]                                    Promoter (<=1kb)         2  84164660  84165260        601          2 LOC110531895 XR_002474772.1
 
       distanceToTSS
 
-          \&lt;numeric\&gt;
+         <numeric>
 
   [1]         27851
 
@@ -407,7 +410,7 @@ IGV takes .tdf files for reads counts. First, convert the bam files into tdf wit
 
 After conversion, you&#39;ll get five files with extension &quot;.bam.tdf&quot;
 
-Now click &quot;File&quot;-\&gt; &quot;Load from File,&quot; and select the tdf files,
+Now click File \-\> Load from File and select the tdf files,
 
 The coverage will be shown as bar plots. Try zooming and moving the viewer window to see some peaks. The genomic region can be input to the text box at the top.
 
