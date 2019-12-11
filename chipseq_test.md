@@ -106,9 +106,9 @@ fastqc *fastqc.gz
 ```
 firefox *html &
 ```
- ![](data:image/*;)
+![fastqc table 1](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/fastqc_tabl1.png)
 
- ![](data:image/*;=)
+![fastqc figure 1](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/fastqc_fig1.png)
 
 - Check the report for read base sequence quality, adapter, over-represented sequences, and sequence duplication levels.
 
@@ -270,7 +270,7 @@ chipObj <- ChIPQC(samples)
 ChIPQCreport(chipObj, reportName="ChIP QC report: K4 and K27", reportFolder="ChIPQCreport")
 ```
 
- [<img src="https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chiqc_tabl1.png">]
+![ChipQC report](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chiqc_tabl1.png)
 
 1. **Handling Replicate in Chip-seq using IDR** (5 minutes)
 
@@ -339,7 +339,7 @@ plotDistToTSS(peakAnnoList, title="Distribution of peak relative to TSS")
 
 ```
 
- ![](data:image/*;==)
+![Chipseeker figure 1](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chipsseker_fig1.png)
 
 ```{r}
 
@@ -414,4 +414,4 @@ Now click File \-\> Load from File and select the tdf files,
 
 The coverage will be shown as bar plots. Try zooming and moving the viewer window to see some peaks. The genomic region can be input to the text box at the top.
 
- ![](data:image/*;=)
+![IGV figure 1](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/igv_fig1.png)
