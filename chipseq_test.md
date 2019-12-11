@@ -40,7 +40,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
     install.packages("devtools")
 
-    devtools::install\_github("hadley/tidyverse")
+    devtools::install_github("hadley/tidyverse")
 ```
 
 **Data** :
@@ -104,7 +104,7 @@ fastqc *fastqc.gz
 ```
 - Several new html files will be generated. You can open these files using the following command
 ```
-firefox *html &amp;
+firefox *html &
 ```
  ![](data:image/*;)
 
@@ -270,7 +270,7 @@ chipObj <- ChIPQC(samples)
 ChIPQCreport(chipObj, reportName="ChIP QC report: K4 and K27", reportFolder="ChIPQCreport")
 ```
 
- ![](data:image/*;==)
+ ![](img src="https://www.cs.mtsu.edu/~raltobasei/chiseq_image/chiqc_tabl1.png")
 
 1. **Handling Replicate in Chip-seq using IDR** (5 minutes)
 
