@@ -22,7 +22,7 @@ Participants should pre-install the following software before they come to the w
 - Picard tools ([https://broadinstitute.github.io/picard/](https://broadinstitute.github.io/picard/)
 - MACS ([https://github.com/taoliu/MACS](https://github.com/taoliu/MACS/)).
 - samtools  ([http://samtools.sourceforge.net](http://samtools.sourceforge.net)).
-- Integrated genome viewer ([http://www.broadinstitute.org/igv/home](http://www.broadinstitute.org/igv/home)).
+- Integrated genome viewer ([https://software.broadinstitute.org/software/igv/](https://software.broadinstitute.org/software/igv/)).
 - R/Bioconductor package diffbind, ChipQC,  ChIPseeker, and GenomicFeatures  to install.
 
 ```{r}
