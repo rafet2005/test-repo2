@@ -17,10 +17,10 @@ Participants should pre-install the following software before they come to the w
 
 - Fastqc([http://www.bioinformatics.babraham.ac.uk/projects/fastqc/](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 - MultiQC ([http://multiqc.info/](http://multiqc.info/))
-- Bowtie2 ([http://bowtie-bio.sourceforge.net/index.shtml](http://bowtie-bio.sourceforge.net/index.shtml)).
+- Bowtie2 ([http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml](http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml)).
 - Deeptools ([https://deeptools.readthedocs.io/en/develop/](https://deeptools.readthedocs.io/en/develop/)
 - Picard tools ([https://broadinstitute.github.io/picard/](https://broadinstitute.github.io/picard/)
-- MACS ([http://liulab.dfci.harvard.edu/MACS/](http://liulab.dfci.harvard.edu/MACS/)).
+- MACS ([https://github.com/taoliu/MACS](https://github.com/taoliu/MACS/)).
 - samtools  ([http://samtools.sourceforge.net](http://samtools.sourceforge.net)).
 - Integrated genome viewer ([http://www.broadinstitute.org/igv/home](http://www.broadinstitute.org/igv/home)).
 - R/Bioconductor package diffbind, ChipQC,  ChIPseeker, and GenomicFeatures  to install.
@@ -111,6 +111,10 @@ fastqc -t 5 *fastqc
 - Several new html files will be generated. You can open these files using the following command
 ```
 firefox *html &
+```
+For mac user 
+```
+open *html
 ```
 ![fastqc table 1](https://www.cs.mtsu.edu/~raltobasei/chiseq_image/fastqc_tabl1.png)
 
