@@ -1,8 +1,8 @@
-#Chip-seq Workshop
+# Chip-seq Workshop
 
-##Bioinformatics Training Workshop at PAG2020
+## Bioinformatics Training Workshop at PAG2020
 
-By (Rafet Al-Tobasei)[rafet.al-tobasei@mtsu.edu]
+By Rafet Al-Tobasei [rafet.al-tobasei@mtsu.edu]
 
 The purpose of this lab is to get participants familiar with the typical workflow of analyzing ChIP-seq data. We will cover the basics of
 
