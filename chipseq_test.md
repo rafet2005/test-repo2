@@ -1,5 +1,6 @@
-**Chip-seq Workshop**
-
+*Chip-seq Workshop*
+*Bioinformatics Training Workshop at PAG2020*
+By [rafet.al-tobasei@mtsu.edu](Rafet Al-Tobasei)
 The purpose of this lab is to get participants familiar with the typical workflow of analyzing ChIP-seq data. We will cover the basics of
 
 - Raw data fastq QC
@@ -53,9 +54,7 @@ We will use the following datasets.
 
 All data can be downloaded from xxx as a zip file.
 
-Use the following command to unzip the tar file
 
-tar –xf data\_fastq\_file.tar
 
 **Directory setup** (10 minutes)
 
@@ -84,20 +83,44 @@ mkdir genome
 
 mkdir results
 
-cd data_fastq_file
-
-mv fastq ../fastq/
-
-mv trout* ../index
 
 ```
+move the data zip file you download to the chipseq_project directory using the following command:
+
+```
+mv /path/to/data_fastq_file.tar .
+
+```
+Use the following command to unzip the tar file
+
+```
+tar –xf data_fastq_file.tar
+```
+
+move the fastq files to your new fastq directory using the following command:
+
+```
+
+mv chipseq_project/data/fastq/*fastq data/fastq/
+```
+
+move the trout genome to your new genome directory using the following command:
+```
+mv chipseq_project/genome/genome_chr1.* genome/
+
+```
+
+you can use ls command to verify if you copy the files into your directory
 
 **Workflow:**
 
 1. **Quality Control** (5-10 minutes)
 
 - We will check the quality of the fastq reads using fastqc.
-- Move into the folder which contains the fastq sequence data using _cd_ command
+- Move into the folder which contains the fastq sequence data using cd command
+```
+cd data/fastq/
+```
 - Run the following command (if you have a multi-core system you can add –t 4)
 ```
 fastqc *fastqc
@@ -106,7 +129,6 @@ or for multi-core system
 
 ```
 fastqc -t 5 *fastqc
-
 ```
 - Several new html files will be generated. You can open these files using the following command
 ```
@@ -132,17 +154,21 @@ mulitqc .
 2. **Mapping/Filtering** (30-40 minutes)
   - **Create a reference index using bowtie2-build**
 
-First, we need to create an index based on our genome reference (bowtie has a pre-built index for common species and available to download from bowtie&#39;s website.)
+First, we need to create an index based on our genome reference (bowtie has a pre-built index for common species and available to download from bowtie website.)
 
 
   - This step is slow, so that we will use a pre-built index. (whenever you run this step it will generate six .ebwt files, which represent the index files for the reference genome)
 
-(Do not run)To build an index use the following command (5 minutes)
+  - To build an index use the following command (5 minutes)
+
+move to the genome directory:
 
 ```
-bowtie2-build path_to_reference_genoem.fa prefix_to_index_name
-```
+cd ../../genome/
 
+bowtie2-build genoem_chr1.fa Trout_genome
+```
+verify that you have six new files using ls command
 
   - **Perform alignment of reads to the genome using Bowtie2**
 
@@ -150,12 +176,16 @@ bowtie2-build path_to_reference_genoem.fa prefix_to_index_name
   - Next, we will align the reads to the reference genome.
 
 Move to the data/map directory using cd command
+```
+cd ../data/map/
+```
 
-Execute the following command (10 minutes)
+Execute the following command (10 minutes) make sure you change the input file name the correct input name 
+repeat this command for all five fastq files.
 
 
 ```
-bowtie2 -p 4 -q --local -x reference_data.fa -U input.fastq -S /results/bowtie2/output.sam
+bowtie2 -p 4 -q --local -x ../../genome/Trout_genome -U ../input_file_name.fastq -S input_file_name.sam
 ```
 
 
@@ -217,9 +247,9 @@ We need to index the bam files for later analysis
 
 
 ```
-samtools index reads.sorted.bam
+samtools index reads_filtered_sorted.bam
 ```
-
+verify that you have correct files using ls command
 
 **Using Picard tools mark duplicate reads** (5 minutes)
 
@@ -235,7 +265,7 @@ java -jar path/to/picard.jar MarkDuplicates INPUT=filtered_Sorted.bam OUTPUT=fil
 
 3. **ChIP-seq peak calling.**
 
-First, create a directory for the output generated from MACS2 and let&#39;s call it peak:
+First, create a directory for the output generated from MACS2 and lets call it peak:
 
 Go to the peak directory, and run following in command window for our four bam files:
 
