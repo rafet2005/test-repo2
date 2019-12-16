@@ -97,7 +97,7 @@ mv /path/to/data_fastq_file.tar .
 Use the following command to unzip the tar file
 
 ```
-tar –xf data_fastq_file.tar
+tar –xzvf data_fastq_file.tar
 ```
 
 move the fastq files to your new fastq directory using the following command:
