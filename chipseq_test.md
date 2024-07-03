@@ -53,7 +53,7 @@ We will use the following datasets.
 
 1. Reference genome and a sequence read (chr 1 only) for Rainbow trout will be used for practicing read quality control (QC), checkup using fastqc, and sequence alignment using bowtie. The small sizes raw sequence read file make the computation fast (index file is provided to expedite the process).
 2. ChIP-seq data for histone D8\_K4 and D8\_K27, and control for D8 cell line. The files were processed to keep only reads aligned to chromosome 1(NC\_035077.1)
-3. If you could not finish a step, you can use the processed data in the tar file to continue to the next step.
+3. If you cannot finish a step, you can use the processed data in the tar file to continue to the next step.
 
 All data can be downloaded from xxx as a zip file.
 
@@ -72,13 +72,13 @@ mkdir chipseq_project
 cd chipseq_project
 ```
 
- Create the following directories structure for your analyses.
+ Create the following directory structure for your analyses.
 
 
 ```
-mkdir –p data/fastq
+mkdir â€“p data/fastq
 
-mkdir –p data/map
+mkdir â€“p data/map
 
 mkdir peak
 
@@ -97,7 +97,7 @@ mv /path/to/data_fastq_file.tar .
 Use the following command to unzip the tar file
 
 ```
-tar –xzvf data_fastq_file.tar
+tar â€“xzvf data_fastq_file.tar
 ```
 
 move the fastq files to your new fastq directory using the following command:
@@ -113,18 +113,18 @@ mv chipseq_project/genome/genome_chr1.* genome/
 
 ```
 
-you can use ls command to verify if you copy the files into your directory
+you can use the ls command to verify if you copied the files into your directory
 
 **Workflow:**
 
 1. **Quality Control** (5-10 minutes)
 
 - We will check the quality of the fastq reads using fastqc.
-- Move into the folder which contains the fastq sequence data using cd command
+- Move into the folder that contains the fastq sequence data using cd command
 ```
 cd data/fastq/
 ```
-- Run the following command (if you have a multi-core system you can add –t 4)
+- Run the following command (if you have a multi-core system, you can add â€“t 4)
 ```
 fastqc *fastqc
 ```
@@ -157,12 +157,12 @@ mulitqc .
 2. **Mapping/Filtering** (30-40 minutes)
   - **Create a reference index using bowtie2-build**
 
-First, we need to create an index based on our genome reference (bowtie has a pre-built index for common species and available to download from bowtie website.)
+First, we need to create an index based on our genome reference (bowtie has a pre-built index for common species and is available to download from the Bowtie website.)
 
 
-  - This step is slow, so that we will use a pre-built index. (whenever you run this step it will generate six .ebwt files, which represent the index files for the reference genome)
+  - This step is slow so we will use a pre-built index. (whenever you run this step, it will generate six .ebwt files, which represent the index files for the reference genome)
 
-  - To build an index use the following command (5 minutes)
+  - To build an index, use the following command (5 minutes)
 
 move to the genome directory:
 
@@ -171,19 +171,19 @@ cd ../../genome/
 
 bowtie2-build genoem_chr1.fa Trout_genome
 ```
-verify that you have six new files using ls command
+verify that you have six new files using the ls command
 
   - **Perform alignment of reads to the genome using Bowtie2**
 
 
   - Next, we will align the reads to the reference genome.
 
-Move to the data/map directory using cd command
+Move to the data/map directory using the cd command
 ```
 cd ../data/map/
 ```
 
-Execute the following command (10 minutes) make sure you change the input file name the correct input name 
+Execute the following command (10 minutes); make sure you change the input file name to the correct input name 
 repeat this command for all five fastq files.
 
 
@@ -204,7 +204,7 @@ bowtie2 -p 4 -q --local -x ../../genome/Trout_genome -U ../input_file_name.fastq
 
 -S: SAM\_file
 
-After this step, bowtie print alignment result statistics on the screen. A file called output\_unsorted.sam is created.  Take a look at the header of the output\_unsorted.sam using the head command.
+After this step, bowtie print alignment results in statistics on the screen. A file called output\_unsorted.sam is created.  Take a look at the header of the output\_unsorted.sam using the head command.
 
 
 ```
@@ -212,15 +212,15 @@ head    output.sam
 ```
 
 
-**Convert the alignment to BAM format, then create an index, and sort the BAM file.** (20 minutes)
+**Convert the alignment to BAM format, then create an index and sort the BAM file.** (20 minutes)
 
-A bam (smaller and faster to process) file format is needed for the next analysis, so we need to convert the sam file to bam file using samtools.
+For the next analysis, we need a bam (smaller and faster to process) file format, so we need to convert the sam file to a bam file using samtools.
 
 Run the following command:
 
 
 ```
-samtools view –h -bS -o output_unsorted.bam input.sam
+samtools view â€“h -bS -o output_unsorted.bam input.sam
 ```
 
 
@@ -230,7 +230,7 @@ Run the following commands:
 
 
 ```
-samtools sort reads.bam –o reads.sorted
+samtools sort reads.bam â€“o reads.sorted
 
 samtools index reads.sorted.bam
 
@@ -252,9 +252,9 @@ We need to index the bam files for later analysis
 ```
 samtools index reads_filtered_sorted.bam
 ```
-verify that you have correct files using ls command
+verify that you have the correct files using the ls command
 
-**Using Picard tools mark duplicate reads** (5 minutes)
+**Using Picard tools, mark duplicate reads** (5 minutes)
 
 **Run the following commands:**
 
@@ -264,17 +264,17 @@ java -jar path/to/picard.jar MarkDuplicates INPUT=filtered_Sorted.bam OUTPUT=fil
 ```
 
 
-**Now we are ready to perform peak calling.** (10 minutes)
+**Now, we are ready to perform peak calling.** (10 minutes)
 
 3. **ChIP-seq peak calling.**
 
-First, create a directory for the output generated from MACS2 and lets call it peak:
+First, create a directory for the output generated from MACS2, and let's call it peak:
 
-Go to the peak directory, and run following in command window for our four bam files:
+Go to the peak directory and run the following in the command window for our four bam files:
 
 
 ```
-macs2 callpeak -t filtered_sorted_mDup.bam -c Input_control.bam –-n output_prefix 2> output.log
+macs2 callpeak -t filtered_sorted_mDup.bam -c Input_control.bam â€“-n output_prefix 2> output.log
 ```
 
 
@@ -286,7 +286,7 @@ This will generate some .xls and .bed files. .bed are peak lists in bed format.
 
 **Using Rstudio, we will check the quality of the peaks.**
 
-**First step: construct a sample sheet describing the ChIP-seq experiment and saved it as a csv file.**
+**First step: construct a sample sheet describing the ChIP-seq experiment and save it as a csv file.**
 
 **Sample sheet format**
 
@@ -321,7 +321,7 @@ Replicates expected to have high consistency among them, but that is not always 
 
 For the first method, we will use deeptools to combine duplicates:
 
-In the chipseq\_poroject directory create a new directory  and name it combin\_replicate using mkdir as follow:
+In the chipseq\_poroject directory, create a new directory  and name it combin\_replicate using mkdir as follows:
 
 
 ```
@@ -330,11 +330,11 @@ mkdir  combin_replicate
 cd combin_replicate
 ```
 
-Run the following command (change the name of replicate to the correct names):
+Run the following command (change the name of the replicate to the correct name):
 
 ```
 
-bedtools intersect  -a ../peak/replicate1 –b ../peak/replicate2 –wo > combin_replicate1_and_2
+bedtools intersect  -a ../peak/replicate1 â€“b ../peak/replicate2 â€“wo > combin_replicate1_and_2
 
 ```
 
